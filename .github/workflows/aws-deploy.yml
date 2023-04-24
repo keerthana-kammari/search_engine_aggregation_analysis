@@ -21,7 +21,7 @@ jobs:
       - name: Install cdk
         run: npm install -g aws-cdk
       - name: Deploy the app
-        run: cdk deploy app.py
+        run: cdk deploy --all
         env:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
