@@ -6,7 +6,7 @@ from aws_cdk import aws_iam as iam
 from aws_cdk.aws_s3 import Bucket
 import aws_cdk.aws_s3_deployment as s3_deployment
 
-class GlueJobStack(Stack):
+class ParseSearchHitsJob(Stack):
     
     def __init__(self, scope: Construct, construct_id: str, parameters:dict, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -26,16 +26,20 @@ class GlueJobStack(Stack):
         glue_job_role.add_to_principal_policy(iam.PolicyStatement(effect=iam.Effect.ALLOW,
                                                                   actions=["s3:List*",
                                                                             "s3:Get*",
-                                                                            "s3:Put*"],
+                                                                            "s3:Put*",
+                                                                            "s3:DeleteObject"],
                                                                   resources=[f"arn:aws:s3:::{parameters['bucket_name']}",
-                                                                             f"arn:aws:s3:::{parameters['bucket_name']}/*"]))
+                                                                             f"arn:aws:s3:::{parameters['bucket_name']}/*",
+                                                                             f"arn:aws:s3:::{parameters['scripts_bucket']}",
+                                                                             f"arn:aws:s3:::{parameters['scripts_bucket']}/*"]))
         
         # decrypt the s3 buckets using the KMS key
         glue_job_role.add_to_principal_policy(iam.PolicyStatement(effect=iam.Effect.ALLOW,
                                                                   actions=["kms:Decrypt",
                                                                             "kms:Encrypt",
                                                                             "kms:GenerateDataKey"],
-                                                                  resources=[f"arn:aws:kms:{Aws.REGION}:{Aws.ACCOUNT_ID}:key/{parameters['key_id']}"]))
+                                                                  resources=[f"arn:aws:kms:{Aws.REGION}:{Aws.ACCOUNT_ID}:key/{parameters['key1']}",
+                                                                             f"arn:aws:kms:{Aws.REGION}:{Aws.ACCOUNT_ID}:key/{parameters['key2']}"]))
         # allow IAM role to write cloud watch metrics
         glue_job_role.add_to_principal_policy(iam.PolicyStatement(effect=iam.Effect.ALLOW,
                                                                   actions=["cloudwatch:PutMetricData"],
@@ -64,7 +68,7 @@ class GlueJobStack(Stack):
                                 command=glue.CfnJob.JobCommandProperty(
                                                                         name="glueetl",
                                                                         python_version="3",
-                                                                        script_location=f"s3://{parameters['bucket_name']}/scripts/parse_source_data.py"
+                                                                        script_location=f"s3://{parameters['scripts_bucket']}/scripts/parse_search_hits_script.py"
                                                                         ),
                                 description="Glue job to parse the source raw data into a structured format",
                                 default_arguments=job_params,
@@ -75,7 +79,7 @@ class GlueJobStack(Stack):
         self.glue_job = glue_job
 
         # upload scripts to s3
-        script_bucket = Bucket.from_bucket_name(self, "ScriptsBucket", parameters["bucket_name"])
+        script_bucket = Bucket.from_bucket_name(self, "ScriptsBucket", parameters["scripts_bucket"])
         s3_deployment.BucketDeployment(self, "DeployGlueJobScript", 
                                         sources=[s3_deployment.Source.asset("./scripts")],
                                         destination_bucket=script_bucket,

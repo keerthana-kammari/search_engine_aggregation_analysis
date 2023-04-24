@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   aws_cdk:
@@ -11,26 +11,37 @@ jobs:
       - name: Set up Python Environment
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
+          python-version: "3.9"
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+      - name: Install cdk
+        run: npm install -g aws-cdk
+      - name: Deploy the app
+        run: cdk deploy app.py
+        env:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: "us-east-2"
+          deployment_package: deploy.zip
 
   deploy-to-aws:
-    if: ${{ false }}  # disable for now
+    if: ${{ false }} # disable for now
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout source code
-      uses: actions/checkout@v2
+      - name: Checkout source code
+        uses: actions/checkout@v2
 
-    - name: Generate deployment package
-      run: zip -r deploy.zip . -x '*.git*'
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
 
-    - name: Deploy the app
-      run: cdk deploy app.py
-      with:
-        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws_region: "us-east-2"
-        deployment_package: deploy.zip
+      - name: Deploy the app
+        run: cdk deploy app.py
+        env:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: "us-east-2"
+          deployment_package: deploy.zip

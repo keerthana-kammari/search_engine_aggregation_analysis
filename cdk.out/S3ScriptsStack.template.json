@@ -216,6 +216,16 @@
    ]
   }
  },
+ "Outputs": {
+  "ExportsOutputRefS3Stack14E6FF649EB0D703": {
+   "Value": {
+    "Ref": "S3Stack14E6FF64"
+   },
+   "Export": {
+    "Name": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+   }
+  }
+ },
  "Parameters": {
   "BootstrapVersion": {
    "Type": "AWS::SSM::Parameter::Value<String>",

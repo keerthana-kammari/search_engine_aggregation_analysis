@@ -152,6 +152,24 @@
               "version": "10.2.1"
             }
           },
+          "Exports": {
+            "id": "Exports",
+            "path": "S3ScriptsStack/Exports",
+            "children": {
+              "Output{\"Ref\":\"S3Stack14E6FF64\"}": {
+                "id": "Output{\"Ref\":\"S3Stack14E6FF64\"}",
+                "path": "S3ScriptsStack/Exports/Output{\"Ref\":\"S3Stack14E6FF64\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.74.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.2.1"
+            }
+          },
           "BootstrapVersion": {
             "id": "BootstrapVersion",
             "path": "S3ScriptsStack/BootstrapVersion",
@@ -233,7 +251,8 @@
                               "Action": [
                                 "s3:List*",
                                 "s3:Get*",
-                                "s3:Put*"
+                                "s3:Put*",
+                                "s3:DeleteObject"
                               ],
                               "Effect": "Allow",
                               "Resource": [
@@ -259,6 +278,29 @@
                                       "/*"
                                     ]
                                   ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:aws:s3:::",
+                                      {
+                                        "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+                                      }
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:aws:s3:::",
+                                      {
+                                        "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
                                 }
                               ]
                             },
@@ -269,22 +311,40 @@
                                 "kms:GenerateDataKey"
                               ],
                               "Effect": "Allow",
-                              "Resource": {
-                                "Fn::Join": [
-                                  "",
-                                  [
-                                    "arn:aws:kms:",
-                                    {
-                                      "Ref": "AWS::Region"
-                                    },
-                                    ":",
-                                    {
-                                      "Ref": "AWS::AccountId"
-                                    },
-                                    ":key/['0345efe6-ac21-4149-bebf-bb675dc99572', 'af7db642-1f5c-4f03-86a3-aa79f9cfeaf9']"
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:aws:kms:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":key/0345efe6-ac21-4149-bebf-bb675dc99572"
+                                    ]
                                   ]
-                                ]
-                              }
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:aws:kms:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":key/af7db642-1f5c-4f03-86a3-aa79f9cfeaf9"
+                                    ]
+                                  ]
+                                }
+                              ]
                             },
                             {
                               "Action": "cloudwatch:PutMetricData",
@@ -343,9 +403,9 @@
                       [
                         "s3://",
                         {
-                          "Fn::ImportValue": "S3BucketStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+                          "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
                         },
-                        "/scripts/parse_source_data.py"
+                        "/scripts/parse_search_hits_script.py"
                       ]
                     ]
                   }
@@ -634,7 +694,7 @@
                                           },
                                           ":s3:::",
                                           {
-                                            "Fn::ImportValue": "S3BucketStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+                                            "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
                                           }
                                         ]
                                       ]
@@ -649,7 +709,7 @@
                                           },
                                           ":s3:::",
                                           {
-                                            "Fn::ImportValue": "S3BucketStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+                                            "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
                                           },
                                           "/*"
                                         ]

@@ -15,7 +15,7 @@ from urllib.parse import parse_qs, urlparse
 
 # read input parameters
 
-source_bucket = "shopzilla-search-eng-hits"
+source_bucket = "shopzilla-search-engine-hits"
 file_name = "data.tsv"
 s3_prefix = "stage_output"
 
@@ -35,11 +35,14 @@ logger.setLevel(logging.INFO)
 s3_client = boto3.client('s3')
 
 def get_input_as_df():
-    input_file_path = "s3://shopzilla-search-eng-hits/data.tsv"
+    input_file_path = "s3://shopzilla-search-engine-hits/data.tsv"
     # reading input tsv file as dataframe
     input_df = spark.read.csv(input_file_path, sep=r'\t', header=True)
     return input_df
 
+# Parse a URL into 6 components: <scheme>://<netloc>/<path>;<params>?<query>#<fragment>
+# Scalable - Possible query terms like "query", ...
+# converting the result search terms into case-insensitive
 def parse_url(url):
     parsed_url = urlparse(url)
     query = parse_qs(parsed_url.query)
@@ -57,7 +60,7 @@ def get_file_name(bucket):
     return file_names[0].split("/")[1]
 
 def write_to_tsv(df):
-    df.coalesce(1).write.option("delimiter", "\t").mode("overwrite").csv("s3://shopzilla-search-eng-hits/stage_output/", header = 'true')
+    df.coalesce(1).write.option("delimiter", "\t").mode("overwrite").csv("s3://shopzilla-search-engine-hits/stage_output/", header = 'true')
     
 def rename_output_s3():
     # rename file in s3

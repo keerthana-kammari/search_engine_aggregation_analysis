@@ -31,7 +31,8 @@
        "Action": [
         "s3:List*",
         "s3:Get*",
-        "s3:Put*"
+        "s3:Put*",
+        "s3:DeleteObject"
        ],
        "Effect": "Allow",
        "Resource": [
@@ -57,6 +58,29 @@
            "/*"
           ]
          ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:s3:::",
+           {
+            "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+           }
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:s3:::",
+           {
+            "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+           },
+           "/*"
+          ]
+         ]
         }
        ]
       },
@@ -67,22 +91,40 @@
         "kms:GenerateDataKey"
        ],
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:aws:kms:",
-          {
-           "Ref": "AWS::Region"
-          },
-          ":",
-          {
-           "Ref": "AWS::AccountId"
-          },
-          ":key/['0345efe6-ac21-4149-bebf-bb675dc99572', 'af7db642-1f5c-4f03-86a3-aa79f9cfeaf9']"
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:kms:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":key/0345efe6-ac21-4149-bebf-bb675dc99572"
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:kms:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":key/af7db642-1f5c-4f03-86a3-aa79f9cfeaf9"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": "cloudwatch:PutMetricData",
@@ -124,9 +166,9 @@
        [
         "s3://",
         {
-         "Fn::ImportValue": "S3BucketStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+         "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
         },
-        "/scripts/parse_source_data.py"
+        "/scripts/parse_search_hits_script.py"
        ]
       ]
      }
@@ -187,10 +229,10 @@
      }
     ],
     "SourceObjectKeys": [
-     "ded21051a04f4fceb16ec5444c91f808d28ab78d62c0067ffe772b61be9cd5a9.zip"
+     "bc0f4d16318f3cda536bf69e9436be1f2dd0fd0e72258be83fb7e8ff8ebbbe72.zip"
     ],
     "DestinationBucketName": {
-     "Fn::ImportValue": "S3BucketStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+     "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
     },
     "DestinationBucketKeyPrefix": "scripts",
     "Prune": true
@@ -306,7 +348,7 @@
            },
            ":s3:::",
            {
-            "Fn::ImportValue": "S3BucketStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+            "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
            }
           ]
          ]
@@ -321,7 +363,7 @@
            },
            ":s3:::",
            {
-            "Fn::ImportValue": "S3BucketStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
+            "Fn::ImportValue": "S3ScriptsStack:ExportsOutputRefS3Stack14E6FF649EB0D703"
            },
            "/*"
           ]
