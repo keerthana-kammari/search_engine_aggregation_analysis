@@ -20,6 +20,12 @@ jobs:
         run: zip -r deploy.zip . -x '*.git*'
       - name: Install cdk
         run: npm install -g aws-cdk
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: "us-east-2"
       - name: Deploy the app
         run: cdk deploy --all
         env:
