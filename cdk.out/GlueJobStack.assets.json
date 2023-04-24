@@ -1,0 +1,58 @@
+{
+  "version": "31.0.0",
+  "files": {
+    "9100e1f25e3613f6f3b64a9296d685424ff6fed8f1be71e22df56e21c1c88d81": {
+      "source": {
+        "path": "asset.9100e1f25e3613f6f3b64a9296d685424ff6fed8f1be71e22df56e21c1c88d81.zip",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "9100e1f25e3613f6f3b64a9296d685424ff6fed8f1be71e22df56e21c1c88d81.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "de91205450df70f943fbde8ad6f4eec685d4c82c11ddec668199a8d2ec4d7065": {
+      "source": {
+        "path": "asset.de91205450df70f943fbde8ad6f4eec685d4c82c11ddec668199a8d2ec4d7065",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "de91205450df70f943fbde8ad6f4eec685d4c82c11ddec668199a8d2ec4d7065.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "ded21051a04f4fceb16ec5444c91f808d28ab78d62c0067ffe772b61be9cd5a9": {
+      "source": {
+        "path": "asset.ded21051a04f4fceb16ec5444c91f808d28ab78d62c0067ffe772b61be9cd5a9",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "ded21051a04f4fceb16ec5444c91f808d28ab78d62c0067ffe772b61be9cd5a9.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "dec6aae33327978d9ba02228da37d31afd2e9a81bbb28e30a4ad188a1a507ee8": {
+      "source": {
+        "path": "GlueJobStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "dec6aae33327978d9ba02228da37d31afd2e9a81bbb28e30a4ad188a1a507ee8.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

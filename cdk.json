@@ -1,0 +1,16 @@
+{
+    "app": "python app.py",
+    "context": {
+      "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": false,
+      "@aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021": false,
+      "@aws-cdk/aws-rds:lowercaseDbIdentifier": false,
+      "@aws-cdk/core:stackRelativeExports": false,
+      "DeploymentEnvironments": [
+          {
+              "envname": "dev",
+              "account": "159631975934",
+              "region": "us-west-2"
+          }
+      ]
+    }
+  }
