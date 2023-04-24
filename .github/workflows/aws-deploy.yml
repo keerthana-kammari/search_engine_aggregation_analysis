@@ -1,22 +1,36 @@
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches: [ "main" ]
+
 jobs:
   aws_cdk:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - name: Set up Python Environment
+        uses: actions/setup-python@v2
         with:
-          node-version: "14"
-      - name: Configure aws credentials
-        uses: aws-actions/configure-aws-credentials@master
-        with:
-          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
-          aws-region: 'us-west-2'
-      - name: Install dependencies
-        run: pip install
-      - name: Synth stack
-        run: cdk synth
-      - name: Deploy stack
-        run: cdk deploy --all --require-approval never
+          python-version: '3.9'
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+  deploy-to-aws:
+    if: ${{ false }}  # disable for now
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Generate deployment package
+      run: zip -r deploy.zip . -x '*.git*'
+
+    - name: Deploy the app
+      run: cdk deploy app.py
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_region: "us-east-2"
+        deployment_package: deploy.zip
