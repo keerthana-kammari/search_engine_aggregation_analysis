@@ -34,10 +34,8 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
-
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
-
       - name: Deploy the app
         run: cdk deploy app.py
         env:
@@ -45,3 +43,4 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: "us-east-2"
           deployment_package: deploy.zip
+
